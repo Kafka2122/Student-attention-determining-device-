@@ -19,10 +19,13 @@ class cnn(nn.Module):
         self.conv1 = nn.Conv2d(3, 32, 3, stride=1, padding=1)
         self.conv2 = nn.Conv2d(32, 64, 3, stride=1, padding=1)
         self.conv3 = nn.Conv2d(64,128,3, stride=1, padding=1)
-        self.pool = nn.MaxPool2d(2, 2)
-        self.fc1 = nn.Linear(1085440, 256)
-        self.fc2 = nn.Linear(256, 128)
-        self.fc3 = nn.Linear(128,3)
+        self.conv4 = nn.Conv2d(128,256,3, stride=1, padding=1)
+        self.pool = nn.MaxPool2d(3, 3)
+        self.fc1 = nn.Linear(90240, 512)
+        #self.fc2 = nn.Linear(1024, 128)
+        #self.fc3 = nn.Linear(128,3)
+        self.fc3 = nn.Linear(512,3)
+        self.dropout = nn.Dropout(p=0.5)
 
     def forward(self, x):
         x = self.pool(F.relu(self.conv1(x)))
@@ -30,7 +33,9 @@ class cnn(nn.Module):
         x = self.pool(F.relu(self.conv3(x)))
         x = torch.flatten(x, 1)
         x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
+        x = self.dropout(x)
+        #x = F.relu(self.fc2(x))
+        #x = self.dropout(x)
         x = F.sigmoid(self.fc3(x))
         return x
 
@@ -92,7 +97,7 @@ with torch.no_grad():
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
     print('Accuracy of the network on the {} train images: {} %'.format(488, 100 * correct / total))
-# torch.save(model, 'attention_model.pth')
+torch.save(model, 'attention_model.pth')
 
 
 

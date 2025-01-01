@@ -9,7 +9,7 @@ import torch.optim as optim
 from torch.nn import CrossEntropyLoss
 from utils import click_pic, preprocess
 import time
-#from model import cnn
+# from model import cnn
 import torch
 from display import disp_high, disp_low, disp_mid 
 class cnn(nn.Module):
@@ -40,7 +40,7 @@ class cnn(nn.Module):
 
 cnn_model = cnn()
 cnn_model = torch.load('attention_model.pth', map_location = "cpu")
-print('hello')
+# print('hello')
 disp_mid()
 while True:
     img = click_pic()
